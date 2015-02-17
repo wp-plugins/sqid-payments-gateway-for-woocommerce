@@ -114,7 +114,7 @@ function woocommerce_SQID_dp_init() {
 			        'title' => __( 'Title', 'wc-SQID' ),
 			        'type' => 'text',
 			        'description' => __( 'This controls the title which the user sees during checkout.', 'wc-SQID' ),
-			        'default' => __( 'SQID Credit Card', 'wc-SQID' )
+			        'default' => __( 'Credit Card via SQID', 'wc-SQID' )
 			    ),
 				'testmode' => array(
 					'title' => __( 'Test mode', 'wc-SQID' ),
