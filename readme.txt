@@ -89,6 +89,7 @@ No. SQID allows payment directly through your website without any extra redirect
 In Australia we support VISA, MasterCard and American Express.
 
 == Screenshots ==
+
 1. WooCommerce checkout page settings page
 
 2. SQID Payments Gateway Checkout Setting Page
