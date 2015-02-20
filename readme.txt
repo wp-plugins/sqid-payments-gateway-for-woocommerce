@@ -23,7 +23,7 @@ The SQID Payments Woocommerce Gateway allows Australian Merchants to accept paym
 
 * WooCommerce (2.2.x) 
 
-= Supported subscriptions and recurring payments:=
+= Supported subscriptions and recurring payments: =
 
 * currently in beta and not available until next release.	
 
