@@ -19,9 +19,13 @@ The SQID Payments Woocommerce Gateway allows Australian Merchants to accept paym
 * PHP 5.3 or higher
 * WordPress 3.8.x or higher
 
-= Supported Shops including subscriptions support: =
+= Supported Shops: =
 
-* WooCommerce (2.2.x) + WooCommerce Subscriptions (1.5.x)	
+* WooCommerce (2.2.x) 
+
+= Supported subscriptions and recurring payments:=
+
+* currently in beta and not available until next release.	
 
 = Team =
 
