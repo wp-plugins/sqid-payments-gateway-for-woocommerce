@@ -12,11 +12,11 @@ The SQID Payments Woocommerce Gateway allows Australian Merchants to accept paym
 
 == Description ==
 
-[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID can create the merchant account for you and __settles funds to any Australian Bank__ and you can use your existing business account because SQID Payments is an aggregator for Westpac Bank.
+[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID can create the merchant account for you and __settles funds to any Australian Bank__ and you can __use your existing business account__ because SQID Payments is an aggregator for Westpac Bank.
 
-The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also gives you access to a Virtual POS terminal for mobile and desktop based payments. All major card brands like MasterCard, VISA, American Express, are supported. 
+The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also includes access to a __Virtual POS terminal for mobile and desktop based payments__. Access to SMS and email based marketing tools that allow you to send direct payment links for deals, offers and bill payments are just part of the normal merchant account.  All major card brands like MasterCard, VISA, American Express, are supported. 
 
-[Merchant pricing](https://sqidpayments.com.au/pricing/) includes plans with no monthly fees. [Apply to become a merchant](https://sqidpayments.com.au/merchant_application/) here and typical approval is in about 24 hours
+[Merchant pricing](https://sqidpayments.com.au/pricing/) includes plans with no monthly fees. [Apply to become a merchant here](https://sqidpayments.com.au/merchant_application/) and typical approval is in about 24 hours
 
 Note: We really think you should have an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.
 
