@@ -1,7 +1,7 @@
 === SQID Payments Gateway for Woocommerce ===
 Contributors: SQID Payments
 Donate link:
-Tags:  australia,  cart, checkout, commerce, credit card, e-commerce, ecommerce, sqidpayments, payment gateway, woocommerce
+Tags:  australia,  cart, checkout, commerce, credit card, e-commerce, ecommerce, sqidpayments, payment gateway, woocommerce, westpac
 Requires at least: 3.8.0
 Tested up to: 4.1.0
 Stable tag: trunk
@@ -12,13 +12,13 @@ The SQID Payments Woocommerce Gateway allows Australian Merchants to accept paym
 
 == Description ==
 
-[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID creates the merchant account for you and settles funds to any Australian Bank and you can use your existing business account. 
+[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID can create the merchant account for you and __settles funds to any Australian Bank__ and you can use your existing business account because SQID Payments is an aggregator for Westpac Bank.
 
 The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also gives you access to a Virtual POS terminal for mobile and desktop based payments. All major card brands like MasterCard, VISA, American Express, are supported. 
 
 [Merchant pricing](https://sqidpayments.com.au/pricing/) includes plans with no monthly fees. [Apply to become a merchant](https://sqidpayments.com.au/merchant_application/) here and typical approval is in about 24 hours
 
-<strong>Note: This extension requires an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.</strong>
+Note: We really think you should have an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.
 
 * PHP 5.3 or higher
 * WordPress 3.8.x or higher
@@ -65,6 +65,10 @@ You'll also need to force SSL on checkout in the WooCommerce settings and of cou
 
 == Frequently Asked Questions ==
 
+= Who’s is the acquiring bank? =
+
+SQID Payments is a merchant aggregator with Westpac Bank in Australia.
+
 = Do I need and SSL certificate? =
 
 Yes you need an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.
@@ -74,7 +78,7 @@ Yes you need an SSL Certificate to be installed on your site to ensure your cust
 This plugin is for free and licensed to GPL.
 It's open source following the GPL policy.
 
-= Is there also an API available?=
+= Is there also an API available? =
 
 Yes, __there is an API__ and details of the latest release are here for [Developers](https://sqidpayments.com.au/developers/)
 
