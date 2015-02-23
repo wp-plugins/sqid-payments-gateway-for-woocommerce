@@ -12,7 +12,11 @@ The SQID Payments Woocommerce Gateway allows Australian Merchants to accept paym
 
 == Description ==
 
-[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID creates the merchant account for you and settles funds to any Australian Bank and you can use your existing business account. The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also gives you access to a Virtual POS terminal for mobile and desktop based payments. All major card brands like MasterCard, VISA, American Express, are supported. 
+[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID creates the merchant account for you and settles funds to any Australian Bank and you can use your existing business account. 
+
+The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also gives you access to a Virtual POS terminal for mobile and desktop based payments. All major card brands like MasterCard, VISA, American Express, are supported. 
+
+[Merchant pricing](https://sqidpayments.com.au/pricing/) includes plans with no monthly fees. [Apply to become a merchant](https://sqidpayments.com.au/merchant_application/) here and typical approval is in about 24 hours
 
 <strong>Note: This extension requires an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.</strong>
 
