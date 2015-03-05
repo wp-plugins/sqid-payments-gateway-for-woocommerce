@@ -5,7 +5,7 @@ Plugin URI: http://woothemes.com/woocommerce
 Description: Use SQID as a credit card processor for WooCommerce.
 Version: 1.0.0
 Author: SQID Payments
-Author URI: https://SQIDpayments.com.au
+Author URI: https://sqidpayments.com.au
 
 Copyright: © 2014 SQID Payments
 
@@ -36,26 +36,26 @@ if ( ! function_exists( 'woothemes_queue_update' ) )
  */
 woothemes_queue_update( plugin_basename( __FILE__ ), 'xxxxxxxxxx', 'xxxxx' );
 
-add_action('plugins_loaded', 'woocommerce_SQID_dp_init', 0);
+add_action('plugins_loaded', 'woocommerce_sqid_dp_init', 0);
 
-function woocommerce_SQID_dp_init() {
+function woocommerce_sqid_dp_init() {
 
 	if (!class_exists('WC_Payment_Gateway'))  return;
 
     /**
      * Localisation
      */
-    load_plugin_textdomain('wc-SQID', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
+    load_plugin_textdomain('wc-sqid', false, dirname( plugin_basename( __FILE__ ) ) . '/languages');
 
-	class WC_Gateway_SQID_Direct_Post extends WC_Payment_Gateway {
+	class WC_Gateway_Sqid_Direct_Post extends WC_Payment_Gateway {
 
 		public function __construct() {
 			global $woocommerce;
 
-		    $this->id 					= 'SQID_dp';
-		    $this->method_title 		= __('SQID Payments', 'wc-SQID');
+		    $this->id 					= 'sqid_dp';
+		    $this->method_title 		= __('SQID Payments', 'wc-sqid');
 			$this->method_description 	= __('SQID handles all the steps in the secure transaction while remaining virtually transparent. Payment data is passed from the checkout form to SQID for processing thus removing the complexity of PCI compliance.', 'wc-SQID');
-			$this->icon 				= plugins_url( '/images/SQIDpayments_80x36.jpg' , __FILE__ );
+			$this->icon 				= plugins_url( '/images/sqidpayments_80x36.jpg' , __FILE__ );
 			$this->supports 			= array( 'subscriptions', 'products', 'subscription_cancellation', 'subscription_reactivation', 'subscription_suspension', 'subscription_date_changes','subscription_amount_changes','subscription_payment_method_change' );
 
 		    // Load the form fields.
@@ -66,9 +66,9 @@ function woocommerce_SQID_dp_init() {
 
 
 			if ($this->settings['testmode'] == 'yes') {
-				$this->payurl = 'https://api.staging.SQIDpay.com/post';
+				$this->payurl = 'https://api.staging.sqidpay.com/post';
 		    } else {
-				$this->payurl = 'https://api.SQIDpay.com/post';
+				$this->payurl = 'https://api.sqidpay.com/post';
 		    }
 		    // Define user set variables
 		    $this->title = $this->settings['title'];
@@ -78,11 +78,11 @@ function woocommerce_SQID_dp_init() {
 		    if ($this->settings['accept_jcb'] == 'yes') $this->description .= ', JCB';
 
    		 	// Hooks
-			add_action( 'woocommerce_receipt_SQID_dp', array(&$this, 'receipt_page') );
+			add_action( 'woocommerce_receipt_sqid_dp', array(&$this, 'receipt_page') );
 
 			// Result listener
-			add_action( 'woocommerce_api_wc_gateway_SQID_direct_post', array(&$this, 'relay_response'));
-			add_action( 'woocommerce_api_wc_gateway_SQID_direct_post', array(&$this, 'ipn_response'));
+			add_action( 'woocommerce_api_wc_gateway_sqid_direct_post', array(&$this, 'relay_response'));
+			add_action( 'woocommerce_api_wc_gateway_sqid_direct_post', array(&$this, 'ipn_response'));
 
 			// Save admin options
 			add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
@@ -91,7 +91,7 @@ function woocommerce_SQID_dp_init() {
 			// Additional tasks if Subscriptions is installed
 			if (class_exists('WC_Subscriptions_Order')) {
 
-				add_action( 'scheduled_subscription_payment_' . $this->id, array( &$this, 'scheduled_subscription_payment' ), 10, 3 );
+				
 				add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', array( &$this, 'remove_renewal_order_meta' ), 10, 4 );
 				add_action( 'woocommerce_subscriptions_changed_failing_payment_method_'.$this->id, array(&$this, 'update_failing_payment_method' ), 10, 2 );
 			}
@@ -105,40 +105,40 @@ function woocommerce_SQID_dp_init() {
 		function init_form_fields() {
 			$this->form_fields = array(
 			    'enabled' => array(
-			        'title' => __( 'Enable/Disable', 'wc-SQID' ),
+			        'title' => __( 'Enable/Disable', 'wc-sqid' ),
 			        'type' => 'checkbox',
-			        'label' => __( 'Enable this payment method', 'wc-SQID' ),
+			        'label' => __( 'Enable this payment method', 'wc-sqid' ),
 			        'default' => 'yes'
 			    ),
 			    'title' => array(
-			        'title' => __( 'Title', 'wc-SQID' ),
+			        'title' => __( 'Title', 'wc-sqid' ),
 			        'type' => 'text',
-			        'description' => __( 'This controls the title which the user sees during checkout.', 'wc-SQID' ),
-			        'default' => __( 'Credit Card via SQID Payments', 'wc-SQID' )
+			        'description' => __( 'This controls the title which the user sees during checkout.', 'wc-sqid' ),
+			        'default' => __( 'Credit Card via SQID Payments', 'wc-sqid' )
 			    ),
 				'testmode' => array(
-					'title' => __( 'Test mode', 'wc-SQID' ),
-					'label' => __( 'Enable Test mode', 'wc-SQID' ),
+					'title' => __( 'Test mode', 'wc-sqid' ),
+					'label' => __( 'Enable Test mode', 'wc-sqid' ),
 					'type' => 'checkbox',
-					'description' => __( 'Process transactions in Test mode. No transactions will actually take place.', 'wc-SQID' ),
+					'description' => __( 'Process transactions in Test mode. No transactions will actually take place.', 'wc-sqid' ),
 					'default' => 'yes'
 				),
 				'merchant_id' => array(
-					'title' => __( 'SQID Merchant Code', 'wc-SQID' ),
+					'title' => __( 'SQID Merchant Code', 'wc-sqid' ),
 					'type' => 'text',
-					'description' => __( 'The SQID Merchant Code will be provided by SQID.', 'wc-SQID' ),
+					'description' => __( 'The SQID Merchant Code will be provided by Sqid.', 'wc-sqid' ),
 					'default' => ''
 				),
 				'api_key' => array(
-					'title' => __( 'SQID API key', 'wc-SQID' ),
+					'title' => __( 'Sqid API key', 'wc-sqid' ),
 					'type' => 'text',
-					'description' => __( 'This API key is provided by SQID.', 'wc-SQID' ),
+					'description' => __( 'This API key is provided by SQID.', 'wc-sqid' ),
 					'default' => ''
 				),
 				'api_passphrase' => array(
-					'title' => __( 'SQID API passphrase', 'wc-SQID' ),
+					'title' => __( 'Sqid API passphrase', 'wc-sqid' ),
 					'type' => 'text',
-					'description' => __( 'This API passphrase is provided by SQID.', 'wc-SQID' ),
+					'description' => __( 'This API passphrase is provided by SQID.', 'wc-sqid' ),
 					'default' => ''
 				),
 				'api_passphrase' => array(
@@ -148,30 +148,30 @@ function woocommerce_SQID_dp_init() {
 					'default' => ''
 				),
 			    'transaction_description' => array(
-			        'title' => __( 'Transaction description', 'wc-SQID' ),
+			        'title' => __( 'Transaction description', 'wc-sqid' ),
 			        'type' => 'text',
-			        'description' => __( 'This will be sent as a payment descriptor to appear on the customer\'s credit card statement.', 'wc-SQID' ),
-			        'default' => __( 'WooCommerce Transaction', 'wc-SQID' )
+			        'description' => __( 'This will be sent as a payment descriptor to appear on the customer\'s credit card statement.', 'wc-sqid' ),
+			        'default' => __( 'WooCommerce Transaction', 'wc-sqid' )
 			    ),
 				'accept_amex' => array(
-					'title' => __( 'Accept American Express', 'wc-SQID' ),
-					'label' => __( 'Accept American Express cards', 'wc-SQID' ),
+					'title' => __( 'Accept American Express', 'wc-sqid' ),
+					'label' => __( 'Accept American Express cards', 'wc-sqid' ),
 					'type' => 'checkbox',
-					'description' => __( 'Contact SQID to activate American Express on your account.', 'wc-SQID' ),
+					'description' => __( 'Contact SQID to activate American Express on your account.', 'wc-sqid' ),
 					'default' => 'no'
 				),
 				'accept_diners' => array(
-					'title' => __( 'Accept Diners Club', 'wc-SQID' ),
-					'label' => __( 'Accept Diners Club cards', 'wc-SQID' ),
+					'title' => __( 'Accept Diners Club', 'wc-sqid' ),
+					'label' => __( 'Accept Diners Club cards', 'wc-sqid' ),
 					'type' => 'checkbox',
-					'description' => __( 'Contact SQID to activate Diners Club on your account.', 'wc-SQID' ),
+					'description' => __( 'Contact SQID to activate Diners Club on your account.', 'wc-sqid' ),
 					'default' => 'no'
 				),
 				'accept_jcb' => array(
-					'title' => __( 'Accept JCB', 'wc-SQID' ),
-					'label' => __( 'Accept JCB cards', 'wc-SQID' ),
+					'title' => __( 'Accept JCB', 'wc-sqid' ),
+					'label' => __( 'Accept JCB cards', 'wc-sqid' ),
 					'type' => 'checkbox',
-					'description' => __( 'Contact SQID to activate JCB on your account.', 'wc-SQID' ),
+					'description' => __( 'Contact SQID to activate JCB on your account.', 'wc-sqid' ),
 					'default' => 'no'
 				)
 			);
@@ -209,7 +209,7 @@ function woocommerce_SQID_dp_init() {
 
 		/**
 		 * Collect the credit card details on the payment page and post
-		 * to SQID Payments
+		 * to Sqid Payments
 		 * - includes fingerprint creation
 		 *
 		 * @since 1.0.0
@@ -231,7 +231,7 @@ function woocommerce_SQID_dp_init() {
 			}
 
 			// Payment form
-			if ($this->settings['testmode']=='yes') : ?><p><?php _e('TEST MODE ENABLED', 'wc-SQID'); ?></p><?php endif;
+			if ($this->settings['testmode']=='yes') : ?><p><?php _e('TEST MODE ENABLED', 'wc-sqid'); ?></p><?php endif;
 
 			// Calculate the payment fingerprints
 			$amount = number_format($amount, 2, '.', '');
@@ -239,7 +239,7 @@ function woocommerce_SQID_dp_init() {
 			 $hash = md5($this->settings['api_passphrase'].$amount.$this->settings['api_key']);
 
 
-			$this->result_url = str_replace( 'https:', 'http:', add_query_arg( 'wc-api', 'WC_Gateway_SQID_Direct_Post', home_url( '/' ) ) );
+			$this->result_url = str_replace( 'https:', 'http:', add_query_arg( 'wc-api', 'WC_Gateway_Sqid_Direct_Post', home_url( '/' ) ) );
 			$this->result_url = add_query_arg('order',$order_id,$this->result_url);
 			$this->result_url = add_query_arg('key',$order->order_key,$this->result_url);
 
@@ -258,7 +258,7 @@ function woocommerce_SQID_dp_init() {
 			if ($this->description) : ?><p><?php echo $this->description; ?></p><?php endif; ?>
 			<form method="POST" action="<?php //echo $this->payurl; ?>">
 			<input type="hidden" name="method" value="<?php echo $method; ?>" />
-			<input type="hidden" name="merchantMerchant Code" value="<?php echo $this->settings['merchant_id']; ?>" />
+			<input type="hidden" name="merchantUUID" value="<?php echo $this->settings['merchant_id']; ?>" />
 		
 			<input type="hidden" name="apiKey" value="<?php echo $this->settings['api_key']; ?>" />
 			<?php if ($method == "processCard") { ?>
@@ -295,8 +295,8 @@ function woocommerce_SQID_dp_init() {
 
 				<fieldset>
 					<p class="form-row form-row-first">
-						<label for="SQID_card_number"><?php _e("Credit card number", 'woocommerce') ?> <span class="required">*</span></label>
-						<input type="text" class="input-text" name="paymentCardNumber" id="SQID_card_number" /><span id="jsCardType"></span>
+						<label for="sqid_card_number"><?php _e("Credit card number", 'woocommerce') ?> <span class="required">*</span></label>
+						<input type="text" class="input-text" name="paymentCardNumber" id="sqid_card_number" /><span id="jsCardType"></span>
 					</p>
 					<div class="clear"></div>
 					<p class="form-row form-row-first">
@@ -326,9 +326,9 @@ function woocommerce_SQID_dp_init() {
 						</select>
 					</p>
 					<p class="form-row form-row-last">
-						<label for="SQID_card_ccv"><?php _e("Card security code", 'woocommerce') ?> <span class="required">*</span></label>
-						<input type="text" class="input-text" id="SQID_card_ccv" name="paymentCardCSC" maxlength="4" style="width:45px" />
-						<span class="help SQID_card_ccv_description"><?php _e('3 or 4 digits usually found on the signature strip.', 'woocommerce') ?></span>
+						<label for="sqid_card_ccv"><?php _e("Card security code", 'woocommerce') ?> <span class="required">*</span></label>
+						<input type="text" class="input-text" id="sqid_card_ccv" name="paymentCardCSC" maxlength="4" style="width:45px" />
+						<span class="help sqid_card_ccv_description"><?php _e('3 or 4 digits usually found on the signature strip.', 'woocommerce') ?></span>
 					</p>
 					<div class="clear"></div>
 				</fieldset>
@@ -626,8 +626,8 @@ function woocommerce_SQID_dp_init() {
 					$this->ipn_response($fArray);
 					$searlize = serialize($decode_data);
 					
-					if($decode_data->SQIDResponseCode == 0) {
-					add_option("transaction_".$decode_data->receiptNo, $searlize);
+					if($decode_data->sqidResponseCode == 0) {
+					//add_option("transaction_".$decode_data->receiptNo, $searlize);
 					$message = 1;
 						$username = $order->billing_first_name.'-'.$order->billing_last_name;
 						$site_url = site_url().'/response?receipt='.$decode_data->receiptNo.'&username='.$username.'&message='.$message;
@@ -638,11 +638,10 @@ function woocommerce_SQID_dp_init() {
 					global $wpdb;
 					$order = new WC_Order( $order_id );
 					$items = $order->get_items();
-				
 					if ($this->settings['testmode'] == 'yes') {
-						$this->payurl = 'https://api.staging.SQIDpay.com/post';
+						$this->payurl = 'https://api.staging.sqidpay.com/post';
 					} else {
-						$this->payurl = 'https://api.SQIDpay.com/post';
+						$this->payurl = 'https://api.sqidpay.com/post';
 					}
 						
 					if(!empty($items) && isset($items)) {
@@ -652,10 +651,11 @@ function woocommerce_SQID_dp_init() {
 							$row = $wpdb->get_row($sql);
 							$sql1 = "Select * from sq_woocommerce_order_items WHERE order_item_id = ".$key.""; 
 							$row1 = $wpdb->get_row($sql1);
-							
+							$sql2 = "Select * from sq_postmeta WHERE post_id = ".$item['product_id']." AND meta_key = '_price' "; 
+							$row2 = $wpdb->get_row($sql2);
 							$subs_product_id 	=	$item['product_id'];
 							$subs_order_id		=	$row1->order_id;
-							$subs_price		 	=	$item['subscription_recurring_amount'];
+							$subs_price			=	$row2->meta_value;
 							$subs_product_name 	=	$item['name'];
 							$subs_total_price 	=	$item['line_subtotal'];
 							$subs_interval	 	=	$item['subscription_interval'];
@@ -668,7 +668,7 @@ function woocommerce_SQID_dp_init() {
 					$susproduct = WC_Subscriptions_Product::get_price_string( $subs_product_id );
 					if(!empty($susproduct)){
 				
-					echo	$insert_query = "insert into sq_subscription(subs_prdct_id,subs_order_id,subs_prdct_price,subs_prdct_name,merchant_code,apikey,currency,hashvalue,token,subs_total_price,subs_interval,time_perioud,subs_length,start_data,expiry_date)values('".$subs_product_id."','".$subs_order_id. "','".$subs_price. "','".$subs_product_name."','".$this->settings['merchant_id']."','".$this->settings['api_key']."','". get_woocommerce_currency() ."','".$hash."','".$dcode->token ."','".$subs_total_price."','".$subs_interval."','".$subs_time_perioud."','".$subs_length."','".$subs_start_date."','".$this->payurl."','".$subs_expiry_date."' )";
+					$insert_query = "insert into sq_subscription(subs_prdct_id,subs_order_id,subs_prdct_price,subs_prdct_name,merchant_code,apikey,currency,hashvalue,token,subs_total_price,subs_interval,time_perioud,subs_length,start_data,url,expiry_date)values('".$subs_product_id."','".$subs_order_id. "','".$subs_price. "','".$subs_product_name."','".$this->settings['merchant_id']."','".$this->settings['api_key']."','". get_woocommerce_currency() ."','".$hash."','".$dcode->token ."','".$subs_total_price."','".$subs_interval."','".$subs_time_perioud."','".$subs_length."','".$subs_start_date."','".$this->payurl."','".$subs_expiry_date."' )";
 				
 					$insert_data = $wpdb->query($insert_query);
 					} 
@@ -728,13 +728,14 @@ function woocommerce_SQID_dp_init() {
 					}
 					
 					$lastid = $wpdb->insert_id;
-					
-					foreach($timeentries as $key=>$value)
-					{
-						if($key!=0)
+					if(!empty($timeentries)) {
+						foreach($timeentries as $key=>$value)
 						{
-							 $insert_sql= "insert into sq_cron_entries(subscription_key	,cron_time,status)values('".$lastid."','".$value. "','0')"; 
-							 $insert_data = $wpdb->query($insert_sql);
+							if($key!=0)
+							{
+								 $insert_sql= "insert into sq_cron_entries(subscription_key	,cron_time,status)values('".$lastid."','".$value. "','0')"; 
+								 $insert_data = $wpdb->query($insert_sql);
+							}
 						}
 					}
 					wp_redirect($site_url);
@@ -750,7 +751,7 @@ function woocommerce_SQID_dp_init() {
 					});
 
 					jQuery('input#jsPayButton').attr('disabled', 'disabled');
-					jQuery('input#SQID_card_number').keyup(function() {
+					jQuery('input#sqid_card_number').keyup(function() {
 						var number = jQuery(this).val();
 						number = number.replace(/[^0-9]/g, '');
 							var re = new RegExp("^4[0-9]{12}(?:[0-9]{3})?$");
@@ -820,25 +821,25 @@ function woocommerce_SQID_dp_init() {
 				$order_id = (int) $POST['custom1'];
 		        $order = new WC_Order($order_id);
 
-						if (isset($POST['SQIDResponseCode']) && (string)$POST['SQIDResponseCode'] == '0') {
+						if (isset($POST['sqidResponseCode']) && (string)$POST['sqidResponseCode'] == '0') {
 			
 								// Payment complete
 								if (isset($POST['transactionID'])) {
 									$order->add_order_note(
-								'SQID Transaction ID: '.(string)$POST['transactionID']."\r\n".'Receipt #: '.(string)$POST['receiptNo']);
+								'Sqid Transaction ID: '.(string)$POST['transactionID']."\r\n".'Receipt #: '.(string)$POST['receiptNo']);
 								} else {
 									// This was probably just an addCard API
-									$order->add_order_note('Card details saved to SQID.');
+									$order->add_order_note('Card details saved to Sqid.');
 								}
 
 								if (class_exists('WC_Subscriptions_Order') && WC_Subscriptions_Order::order_contains_subscription($order_id)) {
 									// Check for saved card key
 									if (isset($POST['custom2'])) {
-										update_post_meta( $order_id, '_SQIDpayments_payment_token', (string)$POST['custom2'] );
+										update_post_meta( $order_id, '_sqidpayments_payment_token', (string)$POST['custom2'] );
 										// Activate subscriptions
 										WC_Subscriptions_Manager::activate_subscriptions_for_order( $order );
 									} else {
-										$order->add_order_note('Unable to store payment details with SQID for ongoing subscription. Cancelling subscription.');
+										$order->add_order_note('Unable to store payment details with Sqid for ongoing subscription. Cancelling subscription.');
 										WC_Subscriptions_Manager::cancel_subscriptions_for_order( $order );
 									}
 								}
@@ -852,7 +853,7 @@ function woocommerce_SQID_dp_init() {
 
 		   
 		 /**
-		 * Don't transfer SQID customer/token meta when creating a parent renewal order.
+		 * Don't transfer Sqid customer/token meta when creating a parent renewal order.
 		 * 
 		 * @access public
 		 * @param array $order_meta_query MySQL query for pulling the metadata
@@ -864,7 +865,7 @@ function woocommerce_SQID_dp_init() {
 		function remove_renewal_order_meta( $order_meta_query, $original_order_id, $renewal_order_id, $new_order_role ) {
 
 			if ( 'parent' == $new_order_role )
-				$order_meta_query .= " AND `meta_key` NOT LIKE '_SQID_payment_token' ";
+				$order_meta_query .= " AND `meta_key` NOT LIKE '_sqid_payment_token' ";
  
 			return $order_meta_query;
 		}
@@ -876,9 +877,9 @@ function woocommerce_SQID_dp_init() {
 	 *
 	 * @since 1.0.0
 	 **/
-	function add_SQID_dp_gateway( $methods ) {
-		$methods[] = 'WC_Gateway_SQID_Direct_Post';
+	function add_sqid_dp_gateway( $methods ) {
+		$methods[] = 'WC_Gateway_sqid_Direct_Post';
 		return $methods;
 	}
-	add_filter('woocommerce_payment_gateways', 'add_SQID_dp_gateway' );
+	add_filter('woocommerce_payment_gateways', 'add_sqid_dp_gateway' );
 }
