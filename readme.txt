@@ -29,7 +29,7 @@ Note: We really think you should have an SSL Certificate to be installed on your
 
 = Supported subscriptions and recurring payments: =
 
-* currently in beta and not available until next release.	
+* WooCommerce Subscriptions (1.5.x)	
 
 = Team =
 
@@ -108,6 +108,10 @@ In Australia we support VISA, MasterCard and American Express.
 
 
 == Changelog ==
+
+= 1.0.1 =
+* Minor edits and improvements
+* Added tokenisation for WooCommerce Subscriptions 1.5.x
 
 = 1.0 =
 * Initial release
