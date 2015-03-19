@@ -3,11 +3,11 @@
 Plugin Name: WooCommerce SQID Gateway V 1.0
 Plugin URI: http://woothemes.com/woocommerce
 Description: Use SQID as a credit card processor for WooCommerce.
-Version: 1.0.1
+Version: 1.0.2
 Author: SQID Payments
 Author URI: https://sqidpayments.com.au
 
-Copyright: © 2014 SQID Payments
+Copyright: © 2014, 2015 SQID Payments Pty Ltd
 
 */
 
@@ -15,8 +15,11 @@ Copyright: © 2014 SQID Payments
  * Required functions
  */
 
- 
+
 add_shortcode('response', 'sendresponse');
+
+
+
 function sendresponse(){
 		if($_GET['message'] == 0){
 				echo '<h1>Payment was not successful, please try again later.</h1>';
@@ -573,7 +576,7 @@ function woocommerce_sqid_dp_init() {
 					"amount"=> $amount,
 					"currency"=>get_woocommerce_currency(),
 					"referenceID"=>$order_id.'_'.time(),
-					"token"=>$dcode->token,
+					//"token"=>$dcode->token,
 					"customerName"=> $order->billing_first_name.' '.$order->billing_last_name,
 					"customerHouseStreet"=>$order->billing_address_1,
 					"customerSuburb"=> $order->billing_city,
@@ -589,7 +592,7 @@ function woocommerce_sqid_dp_init() {
 					"cardName"=> $order->billing_first_name.' '.$order->billing_last_name,
 					"cardCSC"=>$_POST['paymentCardCSC'],
 					"customField1"=>$order_id,
-					"customField2"=>$dcode->token,
+					"customField2"=>"c2",
 					"customField3"=>"c3",
 					"hashValue"=>$hash,
 				);
@@ -615,11 +618,21 @@ function woocommerce_sqid_dp_init() {
 					"hashValue"=>$hash,
 					);
 					
+				    global $filterprice;
+					$filterprice	=	'$'.$amount; 
 					$str_data = json_encode($data);
-					 
+					// Start // Customized email template using hook  
+					 add_filter( 'woocommerce_get_order_item_totals', 'customerTemplate');
+					 function customerTemplate($array) { 
+					 global $filterprice;
+					 $array['cart_subtotal']		=	array("label"=>'Cart Subtotal:',"value"=>$filterprice);
+					
+					return $array;
+					} 
+					// end
 					$decode = $this->sendPostData($this->payurl, $str_data);
 					$decode_data = json_decode($decode);
-					
+					  
 					foreach($decode_data as $key=>$val){
 						$fArray[$key]=$val;
 					}
@@ -635,6 +648,19 @@ function woocommerce_sqid_dp_init() {
 						$message = 0;
 						$site_url = site_url().'/response?message='.$message;
 					}
+					
+					// Checked if Subscription Plugin is Active
+					
+					if (class_exists('WC_Subscriptions')) {
+						
+					function RunCron() 
+					{	
+						require_once(ABSPATH."/wp-subscription-cron.php");
+						
+					}
+					add_action('cronHook','RunCron');
+					wp_schedule_single_event(time()+30*60,'cronHook');
+						
 					global $wpdb;
 					$order = new WC_Order( $order_id );
 					$items = $order->get_items();
@@ -665,9 +691,11 @@ function woocommerce_sqid_dp_init() {
 							$subs_expiry_date 	=	$row->meta_value;
 						}
 					}
+					include_once( ABSPATH . 'wp-admin/includes/plugin.php' ); 
 					$susproduct = WC_Subscriptions_Product::get_price_string( $subs_product_id );
+					
 					if(!empty($susproduct)){
-				
+				 
 					$insert_query = "insert into sq_subscription(subs_prdct_id,subs_order_id,subs_prdct_price,subs_prdct_name,merchant_code,apikey,currency,hashvalue,token,subs_total_price,subs_interval,time_perioud,subs_length,start_data,url,expiry_date)values('".$subs_product_id."','".$subs_order_id. "','".$subs_price. "','".$subs_product_name."','".$this->settings['merchant_id']."','".$this->settings['api_key']."','". get_woocommerce_currency() ."','".$hash."','".$dcode->token ."','".$subs_total_price."','".$subs_interval."','".$subs_time_perioud."','".$subs_length."','".$subs_start_date."','".$this->payurl."','".$subs_expiry_date."' )";
 				
 					$insert_data = $wpdb->query($insert_query);
@@ -738,6 +766,7 @@ function woocommerce_sqid_dp_init() {
 							}
 						}
 					}
+				}
 					wp_redirect($site_url);
 				die;
 				}

@@ -109,6 +109,10 @@ In Australia we support VISA, MasterCard and American Express.
 
 == Changelog ==
 
+= 1.0.2 =
+* Various minor tweaks and speed improvements
+* Minor bug fixes and revised receipt format
+
 = 1.0.1 =
 * Minor edits and improvements
 * Added tokenisation for WooCommerce Subscriptions 1.5.x
