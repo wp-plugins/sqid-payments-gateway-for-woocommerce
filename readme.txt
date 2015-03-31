@@ -8,7 +8,7 @@ Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The SQID Payments Woocommerce Gateway allows Australian Merchants to accept payments on your Woocommerce store for Visa Card and Mastercard.
+The SQID Payments Gateway for Woocommerce allows Australian Merchants to accept payments on your Woocommerce store for Visa Card and Mastercard.
 
 == Description ==
 
@@ -25,7 +25,7 @@ Note: We really think you should have an SSL Certificate to be installed on your
 
 = Supported Shops: =
 
-* WooCommerce (2.2.x) 
+* WooCommerce (2.3.x) 
 
 = Supported subscriptions and recurring payments: =
 
