@@ -47,9 +47,12 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 In the search field type “SQID Payments Woocommerce Gateway” and click Search Plugins. Once you've found the plugin you can install it by simply clicking “Install Now”.
 
+__Add a page called Response and onto that page add the shortcode [response]__
+
 = Manual installation =
 
 Manual installation method involves downloading our the plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex contains [instructions on how to do this here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation).
+__Add a page called Response and onto that page add the shortcode [response]__
 
 = What next” =
 
