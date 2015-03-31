@@ -113,6 +113,8 @@ Be sure that you have a created a page for us to send the response from the gate
 
 2. SQID Payments Gateway Checkout Setting Page
 
+3. Create a transactions results page called Response and insert the [response] shortcode.
+
 
 == Changelog ==
 
