@@ -47,7 +47,7 @@ Automatic installation is the easiest option as WordPress handles the file trans
 
 In the search field type “SQID Payments Woocommerce Gateway” and click Search Plugins. Once you've found the plugin you can install it by simply clicking “Install Now”.
 
-__Add a page called Response and onto that page add the shortcode [response]__
+__Create a page called Response and onto that page add the shortcode [response]__
 
 = Manual installation =
 
@@ -102,6 +102,10 @@ No. SQID allows payment directly through your website without any extra redirect
 = Which Credit Cards are supported? =
 
 In Australia we support VISA, MasterCard and American Express.
+
+= I get a 404 error when I submit test card data? =
+
+Be sure that you have a created a page for us to send the response from the gateway.  Create a page called Response and put the shortcode [response] onto that page.
 
 == Screenshots ==
 
