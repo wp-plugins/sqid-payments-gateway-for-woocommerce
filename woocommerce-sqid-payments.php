@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: WooCommerce SQID Gateway V 1.0
+Plugin Name: WooCommerce SQID Gateway V 1.0.x
 Plugin URI: http://woothemes.com/woocommerce
 Description: Use SQID as a credit card processor for WooCommerce.
-Version: 1.0.2
+Version: 1.0.3
 Author: SQID Payments
 Author URI: https://sqidpayments.com.au
 
@@ -31,6 +31,14 @@ function sendresponse(){
 	<?php
 	}
 }
+
+function RunCron()
+{
+	require_once(ABSPATH."/wp-subscription-cron.php");
+}
+add_action('cronHook','RunCron');
+wp_schedule_single_event(time()+30*60,'cronHook');
+
 if ( ! function_exists( 'woothemes_queue_update' ) )
 	require_once( 'woo-includes/woo-functions.php' );
 
@@ -596,7 +604,6 @@ function woocommerce_sqid_dp_init() {
 					"customField3"=>"c3",
 					"hashValue"=>$hash,
 				);
-					
 					$str_data1 = json_encode($data1);
 				
 					$decode = $this->sendPostData($this->payurl, $str_data1);
@@ -617,18 +624,76 @@ function woocommerce_sqid_dp_init() {
 					"customField3"=>"c3",
 					"hashValue"=>$hash,
 					);
+					global $wpdb;
+					$order = new WC_Order( $order_id );
+					$items = $order->get_items();
 					
-				    global $filterprice;
+					if(!empty($items) && isset($items)) {
+						foreach($items as $key=>$item)
+						{
+							$sql = "Select * from sq_woocommerce_order_itemmeta WHERE order_item_id = ".$key." AND meta_key = '_subscription_expiry_date'  "; 
+							$row = $wpdb->get_row($sql);
+							$sql1 = "Select * from sq_woocommerce_order_items WHERE order_item_id = ".$key.""; 
+							$row1 = $wpdb->get_row($sql1);
+							$sql2 = "Select * from sq_postmeta WHERE post_id = ".$item['product_id']." AND meta_key = '_price' "; 
+							$row2 = $wpdb->get_row($sql2);
+							$subs_product_id 	=	$item['product_id'];
+							$subs_order_id		=	$row1->order_id;
+							$subs_price			=	$row2->meta_value;
+							$subs_product_name 	=	$item['name'];
+							$subs_total_price 	=	$item['line_subtotal'];
+							$subs_interval	 	=	$item['subscription_interval'];
+							$subs_length	 	=	$item['subscription_length'];
+							$subs_time_perioud 	=	$item['subscription_trial_period'];
+							$subs_start_date 	=	$item['subscription_start_date'];
+							$subs_qty			=   $item['qty'];
+							$subs_expiry_date 	=	$row->meta_value;
+						}
+					} 
+					global $totalprice;
+					$totalprice	=	'$'.$amount; 
+					global $subs_qty1;
+					$subs_qty1 = $subs_qty;
+					global $sbprce;
+					$sbprce = '$'.$subs_price;
+					global $subs_length1;
+					$subs_length1 = $subs_length;
+					global $subs_time_perioud1;
+					$subs_time_perioud1 = $subs_time_perioud;
+					global $subs_product_name1;
+					$subs_product_name1 = $subs_product_name;
+					add_filter( 'woocommerce_email_order_items_table','subProduct' );
+					 function subProduct($array1){
+						 global $totalprice;
+						 global $subs_qty1;
+						 global $sbprce;
+						 global $subs_length1;
+						 global $subs_time_perioud1;
+						 global $subs_product_name1;
+						?>
+						<thead>
+							<tr>
+								<th style="text-align:left; border: 1px solid #eee;" scope="col"><?php echo $subs_product_name1; ?></th>
+								<th style="text-align:left; border: 1px solid #eee;" scope="col"><?php echo $subs_qty1; ?></th>
+								<th style="text-align:left; border: 1px solid #eee;" scope="col"><?php echo $totalprice; ?> up front then <?php echo $sbprce; ?> / day for <?php echo $subs_length1; ?> <?php echo $subs_time_perioud1; ?></th>
+							</tr>
+						</thead>
+						<?php
+					
+					 }   
+					
+					
+					
+					global $filterprice;
 					$filterprice	=	'$'.$amount; 
 					$str_data = json_encode($data);
 					// Start // Customized email template using hook  
 					 add_filter( 'woocommerce_get_order_item_totals', 'customerTemplate');
 					 function customerTemplate($array) { 
-					 global $filterprice;
-					 $array['cart_subtotal']		=	array("label"=>'Cart Subtotal:',"value"=>$filterprice);
-					
-					return $array;
-					} 
+						 global $filterprice;
+						 $array['cart_subtotal']		=	array("label"=>'Cart Subtotal:',"value"=>$filterprice);
+						return $array;
+					 } 
 					// end
 					$decode = $this->sendPostData($this->payurl, $str_data);
 					$decode_data = json_decode($decode);
@@ -651,16 +716,8 @@ function woocommerce_sqid_dp_init() {
 					
 					// Checked if Subscription Plugin is Active
 					
+					
 					if (class_exists('WC_Subscriptions')) {
-						
-					function RunCron() 
-					{	
-						require_once(ABSPATH."/wp-subscription-cron.php");
-						
-					}
-					add_action('cronHook','RunCron');
-					wp_schedule_single_event(time()+30*60,'cronHook');
-						
 					global $wpdb;
 					$order = new WC_Order( $order_id );
 					$items = $order->get_items();
@@ -669,7 +726,6 @@ function woocommerce_sqid_dp_init() {
 					} else {
 						$this->payurl = 'https://api.sqidpay.com/post';
 					}
-						
 					if(!empty($items) && isset($items)) {
 						foreach($items as $key=>$item)
 						{
@@ -690,12 +746,16 @@ function woocommerce_sqid_dp_init() {
 							$subs_start_date 	=	$item['subscription_start_date'];
 							$subs_expiry_date 	=	$row->meta_value;
 						}
+						
+						
+				    
+					  
 					}
 					include_once( ABSPATH . 'wp-admin/includes/plugin.php' ); 
 					$susproduct = WC_Subscriptions_Product::get_price_string( $subs_product_id );
 					
 					if(!empty($susproduct)){
-				 
+					global $wpdb;
 					$insert_query = "insert into sq_subscription(subs_prdct_id,subs_order_id,subs_prdct_price,subs_prdct_name,merchant_code,apikey,currency,hashvalue,token,subs_total_price,subs_interval,time_perioud,subs_length,start_data,url,expiry_date)values('".$subs_product_id."','".$subs_order_id. "','".$subs_price. "','".$subs_product_name."','".$this->settings['merchant_id']."','".$this->settings['api_key']."','". get_woocommerce_currency() ."','".$hash."','".$dcode->token ."','".$subs_total_price."','".$subs_interval."','".$subs_time_perioud."','".$subs_length."','".$subs_start_date."','".$this->payurl."','".$subs_expiry_date."' )";
 				
 					$insert_data = $wpdb->query($insert_query);
@@ -900,6 +960,51 @@ function woocommerce_sqid_dp_init() {
 		}
 			
 }
+
+
+	add_action('wp_head', 'addtable');
+	function addtable()
+	{
+			global $wpdb;
+			$querySelect = "SELECT ID FROM sq_subscription";
+			$result = $wpdb->query($querySelect);
+			if(empty($result)) {
+			$queryCreate = "CREATE TABLE sq_subscription (
+			id int(11) AUTO_INCREMENT,
+			subs_prdct_id int(11) NOT NULL,
+			subs_order_id varchar(255) NOT NULL,
+			subs_prdct_price varchar(255) NOT NULL,
+			subs_prdct_name varchar(255) NOT NULL,
+			merchant_code varchar(255) NOT NULL,
+			apikey varchar(255) NOT NULL,
+			currency varchar(255) NOT NULL,
+			hashvalue varchar(255) NOT NULL,
+			token varchar(255) NOT NULL,
+			subs_total_price varchar(255) NOT NULL,
+			subs_interval varchar(255) NOT NULL,
+			time_perioud varchar(255) NOT NULL,
+			subs_length varchar(255) NOT NULL,
+			start_data varchar(255) NOT NULL,
+			url varchar(255) NOT NULL,
+			expiry_date varchar(255) NOT NULL,
+			PRIMARY KEY  (id)
+			)";
+			$wpdb->query($queryCreate);
+		}
+		    $querySelect1 = "SELECT ID FROM sq_cron_entries";
+			$result1 = $wpdb->query($querySelect1);
+			if(empty($result1)) {
+				$queryCreate1 = "CREATE TABLE sq_cron_entries (
+				id int(11) AUTO_INCREMENT,
+				subscription_key int(11) NOT NULL,
+				cron_time varchar(255) NOT NULL,
+				status int(11) NOT NULL,
+				PRIMARY KEY  (id)
+				)";
+				$wpdb->query($queryCreate1);
+			}
+			
+	}
 
 	/**
 	 * Add the SQID Payments gateway to WooCommerce

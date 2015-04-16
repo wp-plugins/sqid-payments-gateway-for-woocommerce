@@ -118,6 +118,9 @@ Be sure that you have a created a page for us to send the response from the gate
 
 == Changelog ==
 
+= 1.0.3 =
+* Update for WP 4.1.1 and some receipt format changes
+
 = 1.0.2 =
 * Various minor tweaks and speed improvements
 * Minor bug fixes and revised receipt format
