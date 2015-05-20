@@ -60,7 +60,7 @@ __Add a page called Response and onto that page add the shortcode [response]__
 * Register for a merchant account on [SQID Payments](https://sqidpayments.com.au)
 * Go to __Woocommerce > Settings>Checkout__ and at the bottom of the page drag SQID to the top of the gateways list and check __default__	
 * Insert Api Keys and credentials and then enable test mode in plugin settings/checkout page that were sent to you.
-* Run some test transactions and log into your [Merchant Portal](https://merchant.sqidpay.com) or [Virtual POS](https://virtualpos.sqidpay.com) to see that they are all correct.
+* Run some test transactions and log into your [Merchant Portal](https://merchant.sqidpay.com) or [Virtual POS](https://virtualpos.sqidpay.com) to see that they are all correct. Testing should be with amounts greater than $1.00.
 * If you are happy how the plugin works, then enable your live account by deselecting the __Enable test mode__ and your cart is __live instantly__.
 * We suggest you run a live transaction and check your merchant portal or Virtual POS (you can refund it in the Virtual POS screen when you are done).
 
@@ -106,6 +106,10 @@ In Australia we support VISA, MasterCard and American Express.
 = I get a 404 error when I submit test card data? =
 
 Be sure that you have a created a page for us to send the response from the gateway.  Create a page called Response and put the shortcode [response] onto that page.
+
+= I got a “Payment was not successful, please try again later.” error message? =
+
+Be sure that the testing amounts greater than $1.00 for either live or test mode testing.
 
 == Screenshots ==
 
