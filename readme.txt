@@ -3,7 +3,7 @@ Contributors: SQID Payments
 Donate link:
 Tags:  australia,  cart, checkout, commerce, credit card, e-commerce, ecommerce, sqidpayments, payment gateway, woocommerce, westpac
 Requires at least: 3.8.0
-Tested up to: 4.2.1
+Tested up to: 4.2.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,16 +16,18 @@ The SQID Payments Gateway for Woocommerce allows Australian Merchants to accept 
 
 The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also includes access to a __Virtual POS terminal for mobile and desktop based payments__. Access to SMS and email based marketing tools that allow you to send direct payment links for deals, offers and bill payments are just part of the normal merchant account.  All major card brands like MasterCard, VISA, American Express, are supported. 
 
+__We strongly recommend you read the [Installation](https://wordpress.org/plugins/sqid-payments-gateway-for-woocommerce/installation/) details.__
+
 [Merchant pricing](https://sqidpayments.com.au/pricing/) includes plans with no monthly fees. [Apply to become a merchant here](https://sqidpayments.com.au/merchant_application/) and typical approval is in about 24 hours
 
-Note: We really think you should have an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.
+Note: You should have an SSL Certificate installed on your site to ensure your customer’s credit card details are safe.
 
 * PHP 5.3 or higher
 * WordPress 3.8.x or higher
 
 = Supported Shops: =
 
-* WooCommerce (2.3.x) 
+* WooCommerce (2.4.x) …tested to 2.4.6
 
 = Supported subscriptions and recurring payments: =
 
@@ -40,7 +42,7 @@ Note: We really think you should have an SSL Certificate to be installed on your
 
 = Minimum Requirements =
 
-* WooCommerce 2.1.0 or later
+* WooCommerce 2.1.0 or later - recommended 2.4 or later
 
 = Automatic installation =
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don't need to leave your web browser. To do an automatic install of WooCommerce, log in to your WordPress dashboard, navigate to the Plugins menu and click Add New.
@@ -60,7 +62,7 @@ __Add a page called Response and onto that page add the shortcode [response]__
 * Register for a merchant account on [SQID Payments](https://sqidpayments.com.au)
 * Go to __Woocommerce > Settings>Checkout__ and at the bottom of the page drag SQID to the top of the gateways list and check __default__	
 * Insert Api Keys and credentials and then enable test mode in plugin settings/checkout page that were sent to you.
-* Run some test transactions and log into your [Merchant Portal](https://merchant.sqidpay.com) or [Virtual POS](https://virtualpos.sqidpay.com) to see that they are all correct. Testing should be with amounts greater than $1.00.
+* Run some test transactions and log into your [Merchant Portal](https://merchant.sqidpay.com) or [Virtual POS](https://virtualpos.sqidpay.com) to see that they are all correct.
 * If you are happy how the plugin works, then enable your live account by deselecting the __Enable test mode__ and your cart is __live instantly__.
 * We suggest you run a live transaction and check your merchant portal or Virtual POS (you can refund it in the Virtual POS screen when you are done).
 
@@ -74,7 +76,7 @@ SQID Payments is a merchant aggregator with Westpac Bank in Australia.
 
 = Do I need and SSL certificate? =
 
-Yes you need an SSL Certificate to be installed on your site to ensure your customer’s credit card details are safe.
+__Yes you need an SSL Certificate__ to be installed on your site to ensure your customer’s credit card details are safe.
 
 = Is this plugin for free? =
 
@@ -107,10 +109,6 @@ In Australia we support VISA, MasterCard and American Express.
 
 Be sure that you have a created a page for us to send the response from the gateway.  Create a page called Response and put the shortcode [response] onto that page.
 
-= I got a “Payment was not successful, please try again later.” error message? =
-
-Be sure that the testing amounts greater than $1.00 for either live or test mode testing.
-
 == Screenshots ==
 
 1. WooCommerce checkout page settings page
@@ -121,6 +119,11 @@ Be sure that the testing amounts greater than $1.00 for either live or test mode
 
 
 == Changelog ==
+
+= 1.0.4 =
+* Update for WP 4.2.4 and Woocommerce 4.2.6
+* Improved validation on checkout fields
+* Minor bug fixes
 
 = 1.0.3 =
 * Update for WP 4.1.1 and some receipt format changes

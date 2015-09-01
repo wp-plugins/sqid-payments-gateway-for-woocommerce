@@ -308,6 +308,7 @@ function woocommerce_sqid_dp_init() {
 					<p class="form-row form-row-first">
 						<label for="sqid_card_number"><?php _e("Credit card number", 'woocommerce') ?> <span class="required">*</span></label>
 						<input type="text" class="input-text" name="paymentCardNumber" id="sqid_card_number" /><span id="jsCardType"></span>
+						<div style="clear: left;float: left;" id="errordiv"></div>
 					</p>
 					<div class="clear"></div>
 					<p class="form-row form-row-first">
@@ -343,7 +344,7 @@ function woocommerce_sqid_dp_init() {
 					</p>
 					<div class="clear"></div>
 				</fieldset>
-				<input type="submit" name="post" id="jsPayButton" class="submit buy button" value="<?php _e('Confirm and pay','woocommerce'); ?>" />
+				<input type="submit" name="post" id="jsPayButton" class="submit buy button" value="<?php _e('Confirm and Pay','woocommerce'); ?>" />
 				</form>
 				<?php 
 				//Country Codes custom array
@@ -608,7 +609,12 @@ function woocommerce_sqid_dp_init() {
 				
 					$decode = $this->sendPostData($this->payurl, $str_data1);
 					$dcode = json_decode($decode);
-				
+					if(empty($dcode->token))
+					{
+						$message = "Please input correct credit card number";
+						echo "<script type='text/javascript'>alert('$message');</script>";
+						die;
+					}
 					//Making Payment by using the previous token
 					
 					$data = array(
@@ -832,6 +838,31 @@ function woocommerce_sqid_dp_init() {
 				}
 				?>
 				<script type="text/javascript">
+				function isCreditCard( CC )
+					 {                    
+						var checksum = 1;
+						  if (CC.length > 19)
+							    return checksum = 0;
+
+						  sum = 0; mul = 1; l = CC.length;
+						  for (i = 0; i < l; i++)
+						  {
+							   digit = CC.substring(l-i-1,l-i);
+							   tproduct = parseInt(digit ,10)*mul;
+							   if (tproduct >= 10)
+									sum += (tproduct % 10) + 1;
+							   else
+									sum += tproduct;
+							   if (mul == 1)
+									mul++;
+							   else
+									mul--;
+						  }
+						  if ((sum % 10) == 0)
+							   return checksum = 1;
+						  else
+							   return checksum = 0;
+					 }
 				jQuery(function(){
 
 					// Copy across the expiry field values to the hidden input
@@ -840,45 +871,76 @@ function woocommerce_sqid_dp_init() {
 					});
 
 					jQuery('input#jsPayButton').attr('disabled', 'disabled');
+					
 					jQuery('input#sqid_card_number').keyup(function() {
 						var number = jQuery(this).val();
-						number = number.replace(/[^0-9]/g, '');
+						var length = number.toString().length;
+						//number = number.replace(/[^0-9]/g, '');
 							var re = new RegExp("^4[0-9]{12}(?:[0-9]{3})?$");
-           					if (number.match(re) != null) {
+							var checksum = isCreditCard(number);
+           					if (number.match(re) && checksum==1 && length==16) {
               				jQuery('span#jsCardType').html('<img src="<?php echo WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/visa.png'; ?>" alt="Visa detected" style="vertical-align: bottom;"/>');
 				            jQuery('input#jsCardType').val('visa');
 				            jQuery('input#jsPayButton').removeAttr('disabled');
 				            return;
            					}
+							else
+							{
+								 jQuery('span#jsCardType').html('Please enter a valid credit card number');
+								jQuery('input#jsPayButton').attr( "disabled", "disabled" );
+							}
 							re = new RegExp("^5[1-5][0-9]{14}$");
-				            if (number.match(re) != null) {
+				            if (number.match(re) != null && checksum==1 && length==16) {
 				            jQuery('span#jsCardType').html('<img src="<?php echo WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/mastercard.png'; ?>" alt="Mastercard detected" style="vertical-align: bottom;"/>');
 				            jQuery('input#jsCardType').val('mastercard');
 				            jQuery('input#jsPayButton').removeAttr('disabled');
 				            return;
 				            }
+							else
+							{
+								 jQuery('span#jsCardType').html('Please enter a valid credit card number');
+								jQuery('input#jsPayButton').attr( "disabled", "disabled" );
+							}
 				            re = new RegExp("^3[47][0-9]{13}$");
-				            if (number.match(re) != null) {
+				            if (number.match(re) != null && checksum==1 && length==15) {
 				            jQuery('span#jsCardType').html('<img src="<?php echo WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/amex.png'; ?>" alt="American Express detected"  style="vertical-align: bottom;"/>');
 				            jQuery('input#jsCardType').val('amex');
 				            jQuery('input#jsPayButton').removeAttr('disabled');
 				            return;
 				            }
+							else
+							{
+								 jQuery('span#jsCardType').html('Please enter a valid credit card number');
+								jQuery('input#jsPayButton').attr( "disabled", "disabled" );
+							}
 				            re = new RegExp("^3(?:0[0-5]|[68][0-9])[0-9]{11}$");
-				            if (number.match(re) != null) {
+				            if (number.match(re) != null && checksum==1) {
 				            jQuery('span#jsCardType').html('<img src="<?php echo WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/diners.png'; ?>" alt="Diners Club card detected"  style="vertical-align: bottom;"/>');
 				            jQuery('input#jsCardType').val('dinersclub');
 				            jQuery('input#jsPayButton').removeAttr('disabled');
 				            return;
 				            }
+							else
+							{
+								jQuery('span#jsCardType').html('Please enter a valid credit card number');
+								jQuery('input#jsPayButton').attr( "disabled", "disabled" );
+							}
 				            re = new RegExp("^(?:3[0-9]{15}|(2131|1800)[0-9]{11})$");
-				            if (number.match(re) != null) {
+				            if (number.match(re) != null && checksum==1) {
 				            jQuery('span#jsCardType').html('<img src="<?php echo WP_PLUGIN_URL . "/" . plugin_basename( dirname(__FILE__)) . '/images/jcb.png'; ?>" alt="JCB card detected"  style="vertical-align: bottom;"/>');
 				            jQuery('input#jsCardType').val('jcb');
 				            jQuery('input#jsPayButton').removeAttr('disabled');
 				            return;
 				            }
-							jQuery('span#jsCardType').html('');
+							else
+							{
+								 jQuery('span#jsCardType').html('Please enter a valid credit card number');
+								jQuery('input#jsPayButton').attr( "disabled", "disabled" );
+							}
+			
+							
+							
+							//jQuery('span#jsCardType').html('');
 							jQuery('input#jsCardType').val('');
 					});
 				});
