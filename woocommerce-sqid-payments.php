@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: WooCommerce SQID Gateway V 1.0.x
+Plugin Name: WooCommerce SQID Gateway
 Plugin URI: http://woothemes.com/woocommerce
 Description: Use SQID as a credit card processor for WooCommerce.
-Version: 1.0.3
+Version: 1.0.4
 Author: SQID Payments
 Author URI: https://sqidpayments.com.au
 
