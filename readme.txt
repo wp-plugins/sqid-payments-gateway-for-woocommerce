@@ -3,7 +3,7 @@ Contributors: SQID Payments
 Donate link:
 Tags:  australia,  cart, checkout, commerce, credit card, e-commerce, ecommerce, sqidpayments, payment gateway, woocommerce, westpac
 Requires at least: 3.8.0
-Tested up to: 4.2.4
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ The SQID Payments Gateway for Woocommerce allows Australian Merchants to accept 
 
 == Description ==
 
-[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID can create the merchant account for you and __settles funds to any Australian Bank__ and you can __use your existing business account__ because SQID Payments is an aggregator for Westpac Bank.
+[SQID Payments](https://sqidpayments.com.au) offers one of the fastest and easiest way to accept payments online in Australia. SQID can create the merchant account for you and __settles funds to any Australian Bank__ and you can __use your existing business account__ because SQID Payments is a payment aggregator using Westpac Bank to connect to the Australian banking network.
 
 The innovative payment solution enables online businesses to quickly integrate payments into their websites. The developer-friendly REST API is flexible and well documented. A SQID Merchant Account also includes access to a __Virtual POS terminal for mobile and desktop based payments__. Access to SMS and email based marketing tools that allow you to send direct payment links for deals, offers and bill payments are just part of the normal merchant account.  All major card brands like MasterCard, VISA, American Express, are supported. 
 
