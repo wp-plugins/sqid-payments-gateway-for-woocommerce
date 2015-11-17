@@ -3,7 +3,7 @@ Contributors: SQID Payments
 Donate link:
 Tags:  australia,  cart, checkout, commerce, credit card, e-commerce, ecommerce, sqidpayments, payment gateway, woocommerce, westpac
 Requires at least: 3.8.0
-Tested up to: 4.3
+Tested up to: 4.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,7 +27,7 @@ Note: You should have an SSL Certificate installed on your site to ensure your c
 
 = Supported Shops: =
 
-* WooCommerce (2.4.x) …tested to 2.4.6
+* WooCommerce (2.4.x) …tested to 2.4.10
 
 = Supported subscriptions and recurring payments: =
 
